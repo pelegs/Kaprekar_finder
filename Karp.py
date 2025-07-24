@@ -31,20 +31,33 @@ def step(n: int, digits: int = 4) -> int:
     min: int
     max: int
     min, max = minmax(ascending, decending)
-    new_val: int = max - min
-    print(f"{max}-{min}={new_val}")
-    if new_val != stop_dict[digits]:
-        return new_val
-    return 0
+    return max - min
 
 
 if __name__ == "__main__":
-    digits: int = int(argv[1])
-    repeat_1s: int = int("1" * digits)
-    for n in range(10**digits):
-        print(f"{n}\n=================")
-        if n % repeat_1s != 0:
-            new: int = n
-            while new := step(new, digits):
-                pass
+    num_digits: int = int(argv[1])
+    max_num: int = 10**num_digits
+    # max_num = 10
+
+    # Generate an integer of repeating 1s to eliminate all its multiples
+    # (i.e. numbers with a single repeating digit)
+    repeat_1s: int = int("1" * num_digits)
+
+    # Accumulating final values
+    final_values: set[int] = set()
+
+    # Actual main stuff
+    for i in range(max_num):
+        print(f"{i}\n=================")
+        if i % repeat_1s != 0:
+            current_num: int = i
+            previous_num: int = current_num
+            while current_num := step(current_num, num_digits):
+                print(previous_num, current_num)
+                if current_num in final_values or previous_num == current_num:
+                    final_values.add(current_num)
+                    break
+                previous_num = current_num
         print("\n")
+    print(f"\n=================")
+    print(f"Final value(s): {final_values}")
